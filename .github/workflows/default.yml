@@ -6,7 +6,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: run sqlserver
+      - name: run sqlserver # https://hub.docker.com/_/microsoft-mssql-server
         env:
           SA_PASSWORD: Casbin_db # The password must be at least 8 characters long and contain characters from three of the following four sets: Uppercase letters, Lowercase letters, Base 10 digits, and Symbols..
         run: |
@@ -14,7 +14,7 @@ jobs:
           echo 'awaiting sqlserver bootup' && sleep 15 && echo 'lets try to logon'
           sqlcmd -S 127.0.0.1 -U sa -P $SA_PASSWORD -Q 'CREATE DATABASE casbin'
           sqlcmd -S 127.0.0.1 -U sa -P $SA_PASSWORD -Q 'SELECT name FROM master.dbo.sysdatabases'
-      - name: run oracle
+      - name: run oracle # https://hub.docker.com/r/orangehrm/oracle-xe-11g
         run: |
           docker run --name oracle -it -d -p 1521:1521 -p 8080:8080 orangehrm/oracle-xe-11g
           echo 'awaiting oracle bootup' && sleep 15 && echo 'lets try to logon'
