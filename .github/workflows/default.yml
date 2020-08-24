@@ -1,0 +1,15 @@
+name: Default
+
+on: [push, pull_request]
+
+jobs:
+  sqlserver:
+    runs-on: ubuntu-latest
+    steps:
+      - name: run sqlserver
+        env:
+          SA_PASSWORD: Casbin_db # The password must be at least 8 characters long and contain characters from three of the following four sets: Uppercase letters, Lowercase letters, Base 10 digits, and Symbols..
+        run: |
+          docker run -it -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD='$SA_PASSWORD'' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
+          sqlcmd -S localhost -U sa -P $SA_PASSWORD -Q 'CREATE DATABASE casbin'
+          sqlcmd -S localhost -U sa -P $SA_PASSWORD -Q 'SELECT name FROM master.dbo.sysdatabases'
